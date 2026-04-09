@@ -18,3 +18,14 @@ Before every session archive, merge the current `claude/*` branch into main. Nev
 4. Tell Andrew it's safe to archive
 
 If the work should NOT be merged (dead end, abandoned), say so explicitly before archiving.
+
+## git-graph.html
+
+Static Mermaid gitGraph for kary-dental. **Always update the date in the `<p>` tag** whenever the graph content changes — it's the only freshness signal users see.
+
+**Constraints learned the hard way:**
+- kary-dental is a private repo — client-side GitHub API fetch returns 404 without auth. Dynamic fetching requires a server-side step (GitHub Actions). Don't attempt it client-side.
+- Mermaid v11 rejects `/` in branch names. Use `-` instead (`claude-feature-x`, not `claude/feature-x`).
+- Merge labels: use `merge-ff` for fast-forward, `merge` for three-way. No parentheses in ids.
+
+**To update the graph:** pull the commit log via MCP tools (`mcp__github__list_commits` on kary-dental main), reconstruct the branch topology from merge commit messages, rewrite the Mermaid block, update the date.
