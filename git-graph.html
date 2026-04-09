@@ -29,12 +29,12 @@ gitGraph
   checkout main
   commit id: "Delta XL handoff"
   commit id: "VoiceStack IVR config"
-  merge claude/cleanup-merge
+  merge claude/cleanup-merge id: "merge (ff)"
   branch claude/github-best-practices
   checkout claude/github-best-practices
   commit id: "Direct merge workflow"
   checkout main
-  merge claude/github-best-practices
+  merge claude/github-best-practices id: "merge (ff)"
   commit id: "Rescue: office chair research"
   commit id: "Rescue: sanitizer/soap"
   commit id: "Rescue: biohazard chute"
@@ -51,7 +51,7 @@ gitGraph
   commit id: "Add PreToolUse guard"
   commit id: "Discuss Before Acting rule"
   checkout main
-  merge claude/scope-cleanup
+  merge claude/scope-cleanup id: "merge (ff)"
   </pre>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
