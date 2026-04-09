@@ -7,133 +7,57 @@
   <style>
     body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 960px; background: #f8f9fa; }
     h1 { font-size: 1.4rem; margin-bottom: 0.5rem; }
-    #status { color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; }
-    #status.error { color: #c00; }
-    .mermaid { background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd; min-height: 4rem; }
+    p { color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .mermaid { background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd; }
   </style>
 </head>
 <body>
   <h1>kary-dental git history</h1>
-  <!-- RULE: Every branch must merge back to main. The graph should show the final state, not a dangling branch. Label fast-forward merges with id: "merge (ff)" and three-way merges with id: "merge". -->
-  <p id="status">Loading commit history…</p>
-  <div class="mermaid" id="graph"></div>
-
+  <p>Recent branch/merge activity — updated 2026-04-09. Branch names shown without slashes (Mermaid v11 limitation).</p>
+  <!-- RULE: Every branch must merge back to main. Label fast-forward merges with id: "merge-ff" and three-way merges with id: "merge". Branch names: replace / with - for Mermaid compatibility. -->
+  <pre class="mermaid">
+gitGraph
+  commit id: "XLSX export tool"
+  commit id: "Vinyl gallery"
+  commit id: "Delta XL reference"
+  commit id: "Drufomat setup guide"
+  commit id: "DMG RS5 STL generator"
+  commit id: "Compute gate"
+  commit id: "Delta XL handoff"
+  commit id: "VoiceStack IVR config"
+  branch claude-cleanup-merge
+  checkout claude-cleanup-merge
+  commit id: "Repo identity header"
+  checkout main
+  merge claude-cleanup-merge id: "merge"
+  branch claude-github-best-practices
+  checkout claude-github-best-practices
+  commit id: "Direct merge workflow"
+  checkout main
+  merge claude-github-best-practices id: "merge"
+  commit id: "Rescue: office chair"
+  commit id: "Rescue: sanitizer/soap"
+  commit id: "Rescue: biohazard chute"
+  commit id: "Rescue: CareStack handoff"
+  commit id: "Stop tracking binaries"
+  commit id: "Broaden .gitignore"
+  commit id: "Add settings.json"
+  commit id: "Add shared-rules.md"
+  branch claude-scope-cleanup
+  checkout claude-scope-cleanup
+  commit id: "Scope cleanup"
+  commit id: "Batch 2 rename"
+  commit id: "Expand shared-rules"
+  commit id: "Add PreToolUse guard"
+  checkout main
+  merge claude-scope-cleanup id: "merge-ff"
+  commit id: "Discuss Before Acting"
+  commit id: "Rule Hierarchy cleanup"
+  commit id: "Multi-Session rule"
+  </pre>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: false, theme: 'default' });
-
-    const OWNER = 'karyandrew';
-    const REPO  = 'kary-dental';
-    const BASE  = 'main';
-    const API   = `https://api.github.com/repos/${OWNER}/${REPO}`;
-
-    async function get(path) {
-      const r = await fetch(API + path);
-      if (!r.ok) throw new Error(`GitHub API ${r.status} — ${path}`);
-      return r.json();
-    }
-
-    // First line of commit message, truncated and safe for Mermaid id strings.
-    // Mermaid v11 gitGraph is strict: remove quotes, backticks, colons, parens.
-    function label(msg) {
-      return msg.split('\n')[0].slice(0, 38)
-        .replace(/["`:()[\]{}]/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
-    }
-
-    // Branch names in Mermaid v11 gitGraph only allow [a-zA-Z0-9_-].
-    function safeBranch(name) {
-      return name.replace(/[^a-zA-Z0-9_-]/g, '-');
-    }
-
-    // Return a unique version of base, tracking used ids in seen.
-    function dedup(base, seen) {
-      let id = base, n = 2;
-      while (seen.has(id)) id = `${base} ${n++}`;
-      seen.add(id);
-      return id;
-    }
-
-    async function buildDef() {
-      // Fetch branch list and recent main commits in parallel.
-      const [branches, raw] = await Promise.all([
-        get('/branches?per_page=100'),
-        get(`/commits?sha=${BASE}&per_page=50`),
-      ]);
-
-      // commits API returns newest-first; reverse to oldest-first for the graph.
-      const mainCommits = raw.slice().reverse();
-      const mainSHAs = new Set(mainCommits.map(c => c.sha));
-
-      // Fetch compare data for all non-main branches in parallel.
-      const comparisons = await Promise.all(
-        branches
-          .filter(b => b.name !== BASE)
-          .map(b =>
-            get(`/compare/${BASE}...${encodeURIComponent(b.name)}`).then(cmp => ({
-              name:    b.name,
-              aheadBy: cmp.ahead_by,
-              commits: cmp.commits,                  // oldest-first from API
-              baseSha: cmp.merge_base_commit?.sha,
-            }))
-          )
-      );
-
-      // Only show branches that have commits not yet on main.
-      const active = comparisons.filter(b => b.aheadBy > 0);
-
-      const seen     = new Set();
-      const inserted = new Set();
-      const lines    = ['gitGraph'];
-
-      for (const c of mainCommits) {
-        const id = dedup(label(c.commit.message), seen);
-        lines.push(`  commit id: "${id}"`);
-
-        // After this commit, branch off any feature branch whose base is here.
-        for (const br of active) {
-          if (br.baseSha === c.sha) {
-            inserted.add(br.name);
-            const bname = safeBranch(br.name);
-            lines.push(`  branch ${bname}`);
-            lines.push(`  checkout ${bname}`);
-            for (const bc of br.commits) {
-              lines.push(`  commit id: "${dedup(label(bc.commit.message), seen)}"`);
-            }
-            lines.push(`  checkout ${BASE}`);
-          }
-        }
-      }
-
-      // Any branch whose base falls outside the fetched commit window.
-      for (const br of active.filter(b => !inserted.has(b.name))) {
-        const bname = safeBranch(br.name);
-        lines.push(`  branch ${bname}`);
-        lines.push(`  checkout ${bname}`);
-        for (const bc of br.commits) {
-          lines.push(`  commit id: "${dedup(label(bc.commit.message), seen)}"`);
-        }
-        lines.push(`  checkout ${BASE}`);
-      }
-
-      return lines.join('\n');
-    }
-
-    (async () => {
-      const status = document.getElementById('status');
-      const graph  = document.getElementById('graph');
-      try {
-        const def = await buildDef();
-        const { svg } = await mermaid.render('gitgraph', def);
-        graph.innerHTML = svg;
-        status.textContent = `Live · GitHub API · karyandrew/${REPO}`;
-      } catch (e) {
-        status.textContent = `Failed to load: ${e.message}`;
-        status.className = 'error';
-        console.error(e);
-      }
-    })();
+    mermaid.initialize({ startOnLoad: true, theme: 'default' });
   </script>
 </body>
 </html>
