@@ -2,7 +2,7 @@
 
 > **Repo:** `karyandrew/pages` | **Default branch:** `main`
 
-Static site hosted via GitHub Pages at `karyandrew.github.io/pages`. Currently contains the Kary Dental window vinyl design explorer.
+Deployment target only. Source files live in their origin repos (e.g. kary-dental). This repo hosts copies for GitHub Pages serving at `karyandrew.github.io/pages`.
 
 ## Deployment
 - **Source:** Deploy from branch `main`, root (`/`)

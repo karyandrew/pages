@@ -12,8 +12,14 @@ Direct, no filler, no sycophancy. Lead with the answer or action. Humor is load-
 ## Discuss Before Acting
 No file deletions, no code edits, no structural changes until the approach is discussed and Andrew says go. Handoff notes and task lists are context, not authorization.
 
+## Rule Hierarchy
+CLAUDE.md and `.claude/rules/` are for behavioral directives only — rules the agent must follow every session. Static reference (tech stack, commands, project structure, doc indexes) goes in `docs/` and is read on demand. Never mix priority behavioral rules with reference minutiae in the same file. Don't write rules for default agent behavior. If any competent agent would do it without being told, it's clutter, not a safeguard. Only codify rules that override defaults or encode project-specific decisions.
+
 ## Compute Gate
 Before creating/rewriting files >100 lines, multi-file generation, or rebuilding something that exists elsewhere — state your plan in 3 sentences or less and wait for approval.
+
+## Session Management
+Subagents: Haiku for mechanical work (file moves, searches, staging), Sonnet when the subtask requires reading comprehension or editorial judgment, Opus only for the main thread. When the topic shifts mid-session, default to delegating via subagent if the detour is small, or commit-and-fresh-session if it's a whole new workstream. After ~15 round trips or 10+ file reads, suggest a fresh session. /compact to continue the same task; fresh session to pivot. Never compact twice.
 
 ## Git Workflow
 Solo dev. No pull requests. Work on claude/* branch, merge directly to main when done, delete branch. See CLAUDE.md for end-of-session checklist.

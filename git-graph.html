@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git Graph — kary-dental</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 960px; background: #f8f9fa; }
+    h1 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+    p { color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .mermaid { background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <h1>kary-dental git history</h1>
+  <p>Recent branch/merge activity. Static snapshot — update manually or replace with API-driven version later.</p>
+  <pre class="mermaid">
+gitGraph
+  commit id: "XLSX export tool"
+  commit id: "Delta XL reference"
+  commit id: "Drufomat setup guide"
+  commit id: "DMG RS5 STL generator"
+  commit id: "Compute gate"
+  branch claude/cleanup-merge
+  checkout claude/cleanup-merge
+  commit id: "Vinyl gallery + assets"
+  commit id: "Repo identity header"
+  checkout main
+  commit id: "Delta XL handoff"
+  commit id: "VoiceStack IVR config"
+  merge claude/cleanup-merge
+  branch claude/github-best-practices
+  checkout claude/github-best-practices
+  commit id: "Direct merge workflow"
+  checkout main
+  merge claude/github-best-practices
+  commit id: "Rescue: office chair research"
+  commit id: "Rescue: sanitizer/soap"
+  commit id: "Rescue: biohazard chute"
+  commit id: "Rescue: CareStack handoff"
+  commit id: "Stop tracking binaries"
+  commit id: "Broaden .gitignore"
+  commit id: "Add settings.json"
+  commit id: "Add shared-rules.md"
+  branch claude/scope-cleanup
+  checkout claude/scope-cleanup
+  commit id: "Scope cleanup"
+  commit id: "Batch 2 rename + trim"
+  commit id: "Expand shared-rules"
+  commit id: "Add PreToolUse guard"
+  commit id: "Discuss Before Acting rule"
+  checkout main
+  </pre>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'default' });
+  </script>
+</body>
+</html>
