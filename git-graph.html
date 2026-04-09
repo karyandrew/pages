@@ -34,15 +34,23 @@
     }
 
     // First line of commit message, truncated and safe for Mermaid id strings.
+    // Mermaid v11 gitGraph is strict: remove quotes, backticks, colons, parens.
     function label(msg) {
       return msg.split('\n')[0].slice(0, 38)
-        .replace(/"/g, "'").replace(/[`]/g, '');
+        .replace(/["`:()[\]{}]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    // Branch names in Mermaid v11 gitGraph only allow [a-zA-Z0-9_-].
+    function safeBranch(name) {
+      return name.replace(/[^a-zA-Z0-9_-]/g, '-');
     }
 
     // Return a unique version of base, tracking used ids in seen.
     function dedup(base, seen) {
       let id = base, n = 2;
-      while (seen.has(id)) id = `${base} (${n++})`;
+      while (seen.has(id)) id = `${base} ${n++}`;
       seen.add(id);
       return id;
     }
@@ -87,8 +95,9 @@
         for (const br of active) {
           if (br.baseSha === c.sha) {
             inserted.add(br.name);
-            lines.push(`  branch ${br.name}`);
-            lines.push(`  checkout ${br.name}`);
+            const bname = safeBranch(br.name);
+            lines.push(`  branch ${bname}`);
+            lines.push(`  checkout ${bname}`);
             for (const bc of br.commits) {
               lines.push(`  commit id: "${dedup(label(bc.commit.message), seen)}"`);
             }
@@ -99,8 +108,9 @@
 
       // Any branch whose base falls outside the fetched commit window.
       for (const br of active.filter(b => !inserted.has(b.name))) {
-        lines.push(`  branch ${br.name}`);
-        lines.push(`  checkout ${br.name}`);
+        const bname = safeBranch(br.name);
+        lines.push(`  branch ${bname}`);
+        lines.push(`  checkout ${bname}`);
         for (const bc of br.commits) {
           lines.push(`  commit id: "${dedup(label(bc.commit.message), seen)}"`);
         }
