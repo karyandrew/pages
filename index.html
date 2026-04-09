@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kary Dental — Window Vinyl Concepts</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#1a1a1a;color:#e0e0e0}
+.header{padding:2rem;border-bottom:1px solid #333}
+.header h1{font-size:1.5rem;color:#fff;margin-bottom:.5rem}
+.header p{font-size:.9rem;color:#888}
+.section{padding:2rem;border-bottom:1px solid #333}
+.section h2{font-size:1.2rem;color:#ccc;margin-bottom:.5rem}
+.desc{font-size:.85rem;color:#888;margin-bottom:1rem}
+.nav{position:sticky;top:0;background:#1a1a1a;border-bottom:1px solid #333;padding:.75rem 2rem;z-index:10;display:flex;gap:1.5rem}
+.nav a{color:#888;text-decoration:none;font-size:.85rem}
+.nav a:hover{color:#895362}
+.band-grid{display:grid;grid-template-columns:1fr;gap:1.5rem}
+.band-card{background:#222;border-radius:6px;padding:1rem;cursor:pointer;transition:border .2s}
+.band-card:hover{border-color:#895362}
+.band-card.active{border:2px solid #895362}
+.band-card h3{font-size:.95rem;color:#ccc;margin-bottom:.25rem}
+.band-card .dims{font-size:.8rem;color:#895362;font-weight:600;margin-bottom:.5rem}
+.controls{background:#222;border-radius:6px;padding:1.5rem;margin-bottom:1.5rem}
+.controls label{display:block;font-size:.85rem;color:#aaa;margin-bottom:.5rem}
+.controls input[type=range]{width:100%;margin-bottom:1rem;accent-color:#895362}
+.controls .val{font-size:1.1rem;color:#895362;font-weight:600}
+.live-preview{border-radius:4px;overflow:hidden;margin-bottom:1rem}
+.live-preview svg{width:100%;height:auto}
+.color-swatch{display:inline-block;width:14px;height:14px;border-radius:2px;vertical-align:middle;margin-right:4px}
+.specs{font-size:.8rem;color:#888;line-height:1.8}
+.specs td{padding:.15rem .5rem}
+.toggle-row{display:flex;gap:1rem;margin-bottom:1rem}
+.toggle-btn{padding:.4rem 1rem;border:1px solid #444;border-radius:4px;background:#222;color:#aaa;cursor:pointer;font-size:.8rem}
+.toggle-btn.active{background:#895362;color:#fff;border-color:#895362}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Kary Dental — Window Vinyl Design</h1>
+<p>Concept #26: Mauve Band. Interactive band height explorer.</p>
+</div>
+<nav class="nav">
+<a href="#explorer">Explorer</a>
+<a href="#presets">Presets</a>
+<a href="#specs">Specs</a>
+</nav>
+<div class="section" id="explorer">
+<h2>Band Height Explorer</h2>
+<p class="desc">Drag sliders to adjust band position. Toggle between backlit and vinyl color views.</p>
+<div class="controls">
+<div class="toggle-row">
+<button class="toggle-btn active" onclick="setMode('backlit',this)">Backlit (evening)</button>
+<button class="toggle-btn" onclick="setMode('vinyl',this)">Vinyl color (daylight)</button>
+</div>
+<label>Bottom edge: <span class="val" id="bot-val">36"</span> from floor</label>
+<input type="range" id="bot-slider" min="12" max="48" value="36" oninput="update()">
+<label>Top edge: <span class="val" id="top-val">68"</span> from floor</label>
+<input type="range" id="top-slider" min="36" max="84" value="68" oninput="update()">
+<label>Band height: <span class="val" id="band-val">32"</span></label>
+</div>
+<div class="live-preview" id="preview"></div>
+</div>
+<div class="section" id="presets">
+<h2>Presets</h2>
+<p class="desc">Click any preset to load it into the explorer above.</p>
+<div class="band-grid" id="preset-grid"></div>
+</div>
+<div class="section" id="specs">
+<h2>Design Specs</h2>
+<table class="specs">
+<tr><td><span class="color-swatch" style="background:#895362"></span> Mauve vinyl (daylight)</td><td>#895362</td></tr>
+<tr><td><span class="color-swatch" style="background:#58353d"></span> Mauve surface (backlit)</td><td>#58353d</td></tr>
+<tr><td><span class="color-swatch" style="background:#8d8c86"></span> Frost glow (all cuts)</td><td>#8d8c86</td></tr>
+<tr><td><span class="color-swatch" style="background:#e8e6e0"></span> LED strip glow</td><td>#e8e6e0</td></tr>
+<tr><td>Scale</td><td>2.5px per inch</td></tr>
+<tr><td>Frame width</td><td>5.5px (2.2")</td></tr>
+<tr><td>Font</td><td>UT Aroge Trial</td></tr>
+<tr><td>Inner surface</td><td>Full frost all panes (VLT 55%)</td></tr>
+<tr><td>LED strips</td><td>Top + bottom, behind frost, always on</td></tr>
+</table>
+</div>
+<script>
+const K='M 40.66,100.51 58.45,125.94H47.66l-13.21-19.09-4.45,3.99V125.94H20.85V80.18h9.15v17.39l-5.56,8.5.72.65 20.92-26.54H56.48ZM77.08,80.18H87.21L104.86,125.94H95.06L91,114.83H73.29L69.23,125.94H59.43ZM88.13,106.98 82.18,90.51 76.16,106.98Zm60.54,18.96h-10.79l-8.89-15.69h-9.09v15.69h-9.15V80.18h17.33q9.28,0,13.99,3.79,4.64,3.73,4.64,11.11,0,6.15-3.2,9.55-3.14,3.33-8.96,3.33h-2.62v.98h6.86zM119.9,88.02v14.38h7.91q9.22,0,9.09-7.19,0-7.26-9.09-7.19zm47.27,22.43-18.18-30.27h10.79l11.96,21.18,11.9-21.18h10.79l-18.11,30.14v15.63h-9.15z';
+const D='m219.07,80.25h17.33q24.13,0,24.19,22.88,0,22.75-24.19,22.88h-17.33zm17.33,37.92q14.51,0,14.38-15.04,0-15.17-14.38-15.04h-8.17v30.08zM269.41,80.25h32.17v7.85h-23.01v10.46h19.29v7.85h-19.29v11.77h23.67v7.85h-32.17zm47.2,11.51-.78.59,4.38,7.98v25.69h-9.15V80.25h7.85l24.19,34.26.78-.59-4.38-7.98V80.25h9.15v45.77h-7.85zm52.17-3.66h-12.29v-7.85h33.67v7.85h-12.23v37.92h-9.15zm35.44-7.85h10.13l17.65,45.77h-9.81l-4.05-11.11h-17.72l-4.05,11.11h-9.81zm11.05,26.81-5.95-16.48-6.01,16.48zm22.62-26.81h9.15v37.92h21.71v7.85h-30.86z';
+const S='<rect x="-5" y="0" w="1560" h="6" fill="#a89c8e"/><rect x="-5" y="268" w="1560" h="17" fill="#8a7e72"/><rect x="-3" y="6" w="5.5" h="262" fill="#b8b8b8"/><rect x="-3" y="6" w="156" h="8" fill="#b8b8b8"/><rect x="-3" y="260" w="156" h="5.5" fill="#b8b8b8"/><rect x="147" y="6" w="5.5" h="262" fill="#b8b8b8"/><rect x="147" y="52" w="194" h="6" fill="#b8b8b8"/><rect x="152.5" y="58" w="5.5" h="210" fill="#b8b8b8"/><rect x="330" y="58" w="5.5" h="210" fill="#b8b8b8"/><rect x="235" y="58" w="5.5" h="191" fill="#b8b8b8"/><rect x="240.5" y="58" w="6.5" h="191" fill="#b8b8b8"/><rect x="152.5" y="260" w="183" h="8" fill="#b8b8b8"/><rect x="335.5" y="6" w="5.5" h="262" fill="#b8b8b8"/><rect x="335.5" y="6" w="156" h="8" fill="#b8b8b8"/><rect x="335.5" y="260" w="156" h="5.5" fill="#b8b8b8"/><rect x="485" y="6" w="5.5" h="262" fill="#b8b8b8"/><rect x="225" y="135" w="3" h="40" fill="#c8c8c8" rx="1"/><rect x="260" y="135" w="3" h="40" fill="#c8c8c8" rx="1"/><rect x="490" y="0" w="64" h="285" fill="#b0a494"/><rect x="498" y="3" w="48" h="279" fill="#c0b4a8" rx="24"/><rect x="552" y="6" w="5.5" h="262" fill="#b8b8b8"/><rect x="552" y="6" w="466" h="8" fill="#b8b8b8"/><rect x="552" y="260" w="466" h="5.5" fill="#b8b8b8"/><rect x="1012.5" y="6" w="5.5" h="262" fill="#b8b8b8"/><rect x="703" y="14" w="5.5" h="246" fill="#b8b8b8"/><rect x="857" y="14" w="5.5" h="246" fill="#b8b8b8"/><rect x="1016" y="0" w="64" h="285" fill="#b0a494"/><rect x="1024" y="3" w="48" h="279" fill="#c0b4a8" rx="24"/><rect x="1078" y="6" w="5.5" h="262" fill="#b8b8b8"/><rect x="1078" y="6" w="466" h="8" fill="#b8b8b8"/><rect x="1078" y="260" w="466" h="5.5" fill="#b8b8b8"/><rect x="1538.5" y="6" w="5.5" h="262" fill="#b8b8b8"/><rect x="1229" y="14" w="5.5" h="246" fill="#b8b8b8"/><rect x="1383" y="14" w="5.5" h="246" fill="#b8b8b8"/>'.replaceAll(' w=', ' width=').replaceAll(' h=', ' height=');
+let mode='backlit';
+const presets=[{n:'Current Favorite',b:36,t:68},{n:'Low Wide',b:18,t:54},{n:'Low Narrow',b:24,t:48},{n:'Mid Narrow',b:36,t:60},{n:'High',b:42,t:72},{n:'High Narrow',b:48,t:72},{n:'Full Mid',b:24,t:66}];
+function y(i){return 260-i*2.5}
+function svg(b,t,m){
+const by=y(t),bh=y(b)-by,bc=(by+y(b))/2,th=Math.min(bh-16,60),sc=th/45.8,wy=bc-th/2;
+const bg=m=='backlit'?'#3a3631':'#e8e4dc',mv=m=='backlit'?'#58353d':'#895362',fr=m=='backlit'?'#8d8c86':'#c8d4dc',dk=m=='backlit'?'#3a3631':'#9a8e82';
+const ft=by-14,fb=260-y(b);
+const led=m=='backlit'?[0,150,338,556,1082].map(x=>`<rect x="${x}" y="12" width="${x<400?(x==150?188:150):458}" height="6" fill="#e8e6e0" filter="url(#g)" opacity=".5"/><rect x="${x}" y="254" width="${x<400?(x==150?188:150):458}" height="6" fill="#e8e6e0" filter="url(#g)" opacity=".5"/>`).join(''):'';
+const wm=c=>`<g clip-path="url(#c${c})"><g transform="translate(-1,${wy}) scale(${sc.toFixed(3)})"><g transform="translate(-20.85,-80.18)"><path d="${K}" fill="${fr}"/><path d="${D}" fill="${fr}"/></g></g></g>`;
+const gl=(x,w)=>`<rect x="${x}" y="14" width="${w}" height="${ft}" fill="${fr}"/><rect x="${x}" y="${by}" width="${w}" height="${bh}" fill="${mv}"/><rect x="${x}" y="${y(b)}" width="${w}" height="${fb}" fill="${fr}"/>`;
+return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1620 320"><defs><filter id="g"><feGaussianBlur stdDeviation="5"/></filter><clipPath id="c1"><rect x="0" y="${by}" width="150" height="${bh}"/></clipPath><clipPath id="c2"><rect x="150" y="${by}" width="188" height="${bh}"/></clipPath><clipPath id="c3"><rect x="338" y="${by}" width="150" height="${bh}"/></clipPath></defs><rect width="1620" height="320" fill="${bg}"/><g transform="translate(15,15)">${led}${gl(0,150)}<rect x="150" y="14" width="188" height="38" fill="${fr}"/><rect x="150" y="58" width="188" height="${by-58}" fill="${fr}"/><rect x="150" y="${by}" width="188" height="${bh}" fill="${mv}"/><rect x="150" y="${y(b)}" width="188" height="${249-y(b)}" fill="${fr}"/><rect x="150" y="249" width="188" height="19" fill="${dk}"/>${gl(338,150)}${gl(556,458)}${gl(1082,458)}${wm(1)}${wm(2)}${wm(3)}<text font-family="sans-serif" font-size="18" fill="${fr}" text-anchor="middle" x="785" y="${bc+6}">(301) 301-3148</text><text font-family="sans-serif" font-size="18" fill="${fr}" text-anchor="middle" x="1311" y="${bc+6}">karydental.com</text><text font-family="sans-serif" font-size="8" fill="${fr}" text-anchor="middle" x="285" y="${y(b)+15}">Wed Fri Sat</text><text font-family="sans-serif" font-size="7" fill="${fr}" text-anchor="middle" x="285" y="${y(b)+25}">by appointment</text><text font-family="sans-serif" font-size="10" fill="${fr}" text-anchor="middle" x="244" y="40">7700 C</text>${S}</g></svg>`}
+function update(){let b=+document.getElementById('bot-slider').value,t=+document.getElementById('top-slider').value;if(t<=b+12)t=b+12;document.getElementById('top-slider').value=t;document.getElementById('bot-val').textContent=b+'"';document.getElementById('top-val').textContent=t+'"';document.getElementById('band-val').textContent=(t-b)+'"';document.getElementById('preview').innerHTML=svg(b,t,mode)}
+function setMode(m,el){mode=m;document.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');update();renderPresets()}
+function loadPreset(b,t){document.getElementById('bot-slider').value=b;document.getElementById('top-slider').value=t;update();window.scrollTo({top:0,behavior:'smooth'})}
+function renderPresets(){document.getElementById('preset-grid').innerHTML=presets.map((p,i)=>`<div class="band-card${i==0?' active':''}" onclick="loadPreset(${p.b},${p.t})"><h3>${p.n}</h3><div class="dims">${p.b}\u2013${p.t}" from floor (${p.t-p.b}" band)</div><div>${svg(p.b,p.t,mode)}</div></div>`).join('')}
+update();renderPresets();
+</script>
+</body>
+</html>
