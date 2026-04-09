@@ -21,5 +21,8 @@ Before creating/rewriting files >100 lines, multi-file generation, or rebuilding
 ## Session Management
 Subagents: Haiku for mechanical work (file moves, searches, staging), Sonnet when the subtask requires reading comprehension or editorial judgment, Opus only for the main thread. When the topic shifts mid-session, default to delegating via subagent if the detour is small, or commit-and-fresh-session if it's a whole new workstream. After ~15 round trips or 10+ file reads, suggest a fresh session. /compact to continue the same task; fresh session to pivot. Never compact twice.
 
+## Multi-Session
+Multiple sessions may work on the same repo simultaneously on separate `claude/*` branches. When drafting genesis prompts, pick a descriptive branch name (e.g. `claude/vinyl-explorer`, not auto-generated). Minimize overlapping file edits across concurrent sessions — different facets, different files. Merge conflicts are manageable but avoidable with good scoping.
+
 ## Git Workflow
 Solo dev. No pull requests. Work on claude/* branch, merge directly to main when done, delete branch. See CLAUDE.md for end-of-session checklist.

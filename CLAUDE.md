@@ -8,10 +8,7 @@ Deployment target only. Source files live in their origin repos (e.g. kary-denta
 - **Source:** Deploy from branch `main`, root (`/`)
 - Changes pushed to `main` auto-deploy via GitHub Pages
 
-## Git Workflow
-This is a solo repo -- Andrew is the only contributor. No pull requests needed. Work on a `claude/*` branch and merge directly to `main` when done.
-
-### Merge Before Archive (MANDATORY)
+## Merge Before Archive (MANDATORY)
 Before every session archive, merge the current `claude/*` branch into main. Never leave work stranded on an orphaned branch.
 
 **Steps at end of every session:**
@@ -21,7 +18,3 @@ Before every session archive, merge the current `claude/*` branch into main. Nev
 4. Tell Andrew it's safe to archive
 
 If the work should NOT be merged (dead end, abandoned), say so explicitly before archiving.
-
-## Working with Andrew
-- Direct. No filler, no sycophancy.
-- Humor is load-bearing.
