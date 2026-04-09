@@ -29,20 +29,20 @@ gitGraph
   checkout claude-cleanup-merge
   commit id: "Repo identity header"
   checkout main
-  merge claude-cleanup-merge id: "merge"
+  merge claude-cleanup-merge id: "3way"
   branch claude-github-best-practices
   checkout claude-github-best-practices
   commit id: "Direct merge workflow"
   checkout main
-  merge claude-github-best-practices id: "merge"
-  commit id: "Rescue: office chair"
-  commit id: "Rescue: sanitizer/soap"
-  commit id: "Rescue: biohazard chute"
-  commit id: "Rescue: CareStack handoff"
+  merge claude-github-best-practices id: "3way-2"
+  commit id: "Rescue office chair"
+  commit id: "Rescue sanitizer soap"
+  commit id: "Rescue biohazard chute"
+  commit id: "Rescue CareStack handoff"
   commit id: "Stop tracking binaries"
-  commit id: "Broaden .gitignore"
-  commit id: "Add settings.json"
-  commit id: "Add shared-rules.md"
+  commit id: "Broaden gitignore"
+  commit id: "Add settings json"
+  commit id: "Add shared-rules"
   branch claude-scope-cleanup
   checkout claude-scope-cleanup
   commit id: "Scope cleanup"
@@ -50,7 +50,7 @@ gitGraph
   commit id: "Expand shared-rules"
   commit id: "Add PreToolUse guard"
   checkout main
-  merge claude-scope-cleanup id: "merge-ff"
+  merge claude-scope-cleanup id: "ff"
   commit id: "Discuss Before Acting"
   commit id: "Rule Hierarchy cleanup"
   commit id: "Multi-Session rule"
