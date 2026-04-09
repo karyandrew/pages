@@ -7,55 +7,123 @@
   <style>
     body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 960px; background: #f8f9fa; }
     h1 { font-size: 1.4rem; margin-bottom: 0.5rem; }
-    p { color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; }
-    .mermaid { background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd; }
+    #status { color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    #status.error { color: #c00; }
+    .mermaid { background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #ddd; min-height: 4rem; }
   </style>
 </head>
 <body>
   <h1>kary-dental git history</h1>
-  <p>Recent branch/merge activity. Static snapshot — update manually or replace with API-driven version later.</p>
   <!-- RULE: Every branch must merge back to main. The graph should show the final state, not a dangling branch. Label fast-forward merges with id: "merge (ff)" and three-way merges with id: "merge". -->
-  <pre class="mermaid">
-gitGraph
-  commit id: "XLSX export tool"
-  commit id: "Delta XL reference"
-  commit id: "Drufomat setup guide"
-  commit id: "DMG RS5 STL generator"
-  commit id: "Compute gate"
-  branch claude/cleanup-merge
-  checkout claude/cleanup-merge
-  commit id: "Vinyl gallery + assets"
-  commit id: "Repo identity header"
-  checkout main
-  commit id: "Delta XL handoff"
-  commit id: "VoiceStack IVR config"
-  merge claude/cleanup-merge id: "merge (ff)"
-  branch claude/github-best-practices
-  checkout claude/github-best-practices
-  commit id: "Direct merge workflow"
-  checkout main
-  merge claude/github-best-practices id: "merge (ff)"
-  commit id: "Rescue: office chair research"
-  commit id: "Rescue: sanitizer/soap"
-  commit id: "Rescue: biohazard chute"
-  commit id: "Rescue: CareStack handoff"
-  commit id: "Stop tracking binaries"
-  commit id: "Broaden .gitignore"
-  commit id: "Add settings.json"
-  commit id: "Add shared-rules.md"
-  branch claude/scope-cleanup
-  checkout claude/scope-cleanup
-  commit id: "Scope cleanup"
-  commit id: "Batch 2 rename + trim"
-  commit id: "Expand shared-rules"
-  commit id: "Add PreToolUse guard"
-  commit id: "Discuss Before Acting rule"
-  checkout main
-  merge claude/scope-cleanup id: "merge (ff)"
-  </pre>
+  <p id="status">Loading commit history…</p>
+  <div class="mermaid" id="graph"></div>
+
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    mermaid.initialize({ startOnLoad: false, theme: 'default' });
+
+    const OWNER = 'karyandrew';
+    const REPO  = 'kary-dental';
+    const BASE  = 'main';
+    const API   = `https://api.github.com/repos/${OWNER}/${REPO}`;
+
+    async function get(path) {
+      const r = await fetch(API + path);
+      if (!r.ok) throw new Error(`GitHub API ${r.status} — ${path}`);
+      return r.json();
+    }
+
+    // First line of commit message, truncated and safe for Mermaid id strings.
+    function label(msg) {
+      return msg.split('\n')[0].slice(0, 38)
+        .replace(/"/g, "'").replace(/[`]/g, '');
+    }
+
+    // Return a unique version of base, tracking used ids in seen.
+    function dedup(base, seen) {
+      let id = base, n = 2;
+      while (seen.has(id)) id = `${base} (${n++})`;
+      seen.add(id);
+      return id;
+    }
+
+    async function buildDef() {
+      // Fetch branch list and recent main commits in parallel.
+      const [branches, raw] = await Promise.all([
+        get('/branches?per_page=100'),
+        get(`/commits?sha=${BASE}&per_page=50`),
+      ]);
+
+      // commits API returns newest-first; reverse to oldest-first for the graph.
+      const mainCommits = raw.slice().reverse();
+      const mainSHAs = new Set(mainCommits.map(c => c.sha));
+
+      // Fetch compare data for all non-main branches in parallel.
+      const comparisons = await Promise.all(
+        branches
+          .filter(b => b.name !== BASE)
+          .map(b =>
+            get(`/compare/${BASE}...${encodeURIComponent(b.name)}`).then(cmp => ({
+              name:    b.name,
+              aheadBy: cmp.ahead_by,
+              commits: cmp.commits,                  // oldest-first from API
+              baseSha: cmp.merge_base_commit?.sha,
+            }))
+          )
+      );
+
+      // Only show branches that have commits not yet on main.
+      const active = comparisons.filter(b => b.aheadBy > 0);
+
+      const seen     = new Set();
+      const inserted = new Set();
+      const lines    = ['gitGraph'];
+
+      for (const c of mainCommits) {
+        const id = dedup(label(c.commit.message), seen);
+        lines.push(`  commit id: "${id}"`);
+
+        // After this commit, branch off any feature branch whose base is here.
+        for (const br of active) {
+          if (br.baseSha === c.sha) {
+            inserted.add(br.name);
+            lines.push(`  branch ${br.name}`);
+            lines.push(`  checkout ${br.name}`);
+            for (const bc of br.commits) {
+              lines.push(`  commit id: "${dedup(label(bc.commit.message), seen)}"`);
+            }
+            lines.push(`  checkout ${BASE}`);
+          }
+        }
+      }
+
+      // Any branch whose base falls outside the fetched commit window.
+      for (const br of active.filter(b => !inserted.has(b.name))) {
+        lines.push(`  branch ${br.name}`);
+        lines.push(`  checkout ${br.name}`);
+        for (const bc of br.commits) {
+          lines.push(`  commit id: "${dedup(label(bc.commit.message), seen)}"`);
+        }
+        lines.push(`  checkout ${BASE}`);
+      }
+
+      return lines.join('\n');
+    }
+
+    (async () => {
+      const status = document.getElementById('status');
+      const graph  = document.getElementById('graph');
+      try {
+        const def = await buildDef();
+        const { svg } = await mermaid.render('gitgraph', def);
+        graph.innerHTML = svg;
+        status.textContent = `Live · GitHub API · karyandrew/${REPO}`;
+      } catch (e) {
+        status.textContent = `Failed to load: ${e.message}`;
+        status.className = 'error';
+        console.error(e);
+      }
+    })();
   </script>
 </body>
 </html>
