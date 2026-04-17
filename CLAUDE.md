@@ -6,6 +6,9 @@ Deployment target only. Source files live in their origin repos (e.g. kary-denta
 
 **Read `TODO.md` at session start for current active tasks.**
 
+## Dependencies
+karyandrew/second-brain
+
 ## Deployment
 - **Source:** Deploy from branch `main`, root (`/`)
 - Changes pushed to `main` auto-deploy via GitHub Pages
