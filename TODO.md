@@ -2,7 +2,7 @@
 
 ## git-graph.html
 
-- [ ] Update git-graph.html when kary-dental branch topology changes
+- [ ] Regenerate git-graph.html **on request only** (not automatic). Trigger: Andrew asks for an update after a notable kary-dental branch-topology change.
 
 ## kd-tax-strategy.md
 
