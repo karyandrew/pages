@@ -7,14 +7,14 @@ Deployment target only. Source files live in their origin repos. This repo hosts
 **Read `TODO.md` at session start for current active tasks.**
 
 ## Dependencies
-- `karyandrew/second-brain` — canonical cross-repo rules, sensitivity policy, and wiki. The agent MUST read `karyandrew/second-brain/rules/shared-rules.md` and `karyandrew/second-brain/rules/sensitivity.md` at session start. Local `.claude/rules/` is vestigial and superseded by second-brain — see the readiness-audit follow-up todo for the migration plan.
+- `karyandrew/second-brain` — canonical cross-repo rules, sensitivity policy, and wiki. A SessionStart hook (`.claude/hooks/fetch-second-brain-rules.sh`) mirrors the second-brain repo into `.claude/.cache/second-brain/` at every session start (web or local). The agent MUST read `.claude/.cache/second-brain/rules/shared-rules.md` and `.claude/.cache/second-brain/rules/sensitivity.md` before acting.
 
 ## Deployment
 - **Source:** Deploy from branch `main`, root (`/`)
 - Changes pushed to `main` auto-deploy via GitHub Pages
 
 ## Git Workflow
-Solo dev. Work on a `claude/*` branch, open a PR, merge it with a merge commit (not squash, not rebase), and delete the branch if auto-delete didn't. Canonical rule lives in `karyandrew/second-brain/rules/shared-rules.md` → Git Workflow.
+Solo dev. Work on a `claude/*` branch, open a PR, merge it with a merge commit (not squash, not rebase), and delete the branch if auto-delete didn't. Canonical rule lives in `.claude/.cache/second-brain/rules/shared-rules.md` → Git Workflow.
 
 ## Merge Before Archive (MANDATORY)
 Before every session archive, merge the current `claude/*` branch into main via PR. Never leave work stranded on an orphaned branch.
