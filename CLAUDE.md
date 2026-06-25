@@ -4,7 +4,6 @@
 
 Deployment target only. Source files live in their origin repos. This repo hosts copies for GitHub Pages serving at `karyandrew.github.io/pages`.
 
-**Read `TODO.md` at session start for current active tasks.**
 
 ## Dependencies
 - `karyandrew/second-brain` — canonical cross-repo rules, sensitivity policy, and wiki. A SessionStart hook (`.claude/hooks/fetch-second-brain-rules.sh`) mirrors the second-brain repo into `.claude/.cache/second-brain/` at every session start (web or local). The agent MUST read `.claude/.cache/second-brain/rules/shared-rules.md` and `.claude/.cache/second-brain/rules/sensitivity.md` before acting.
@@ -21,22 +20,12 @@ Before every session archive, merge the current `claude/*` branch into main via 
 
 **Steps at end of every session:**
 1. Commit and push any in-progress work
-2. Update `TODO.md` — check off completed items, add new items discovered this session
-3. Open a PR: `gh pr create --base main --head <branch>`
-4. Merge with a merge commit: `gh pr merge <num> --merge`
-5. Head branch auto-deletes on merge (repo setting enabled). Run `git fetch --prune` locally to clean up stale remote-tracking refs.
-6. Tell Andrew it's safe to archive
+2. Open a PR: `gh pr create --base main --head <branch>`
+3. Merge with a merge commit: `gh pr merge <num> --merge`
+4. Head branch auto-deletes on merge (repo setting enabled). Run `git fetch --prune` locally to clean up stale remote-tracking refs.
+5. Tell Andrew it's safe to archive
 
 If the work should NOT be merged (dead end, abandoned), say so explicitly before archiving.
 
-## git-graph.html
-
-Static Mermaid gitGraph. **Always update the date in the `<p>` tag** whenever the graph content changes — it's the only freshness signal users see.
-
-**Constraints learned the hard way:**
-- Origin repos may be private — client-side GitHub API fetch returns 404 without auth. Dynamic fetching requires a server-side step (GitHub Actions). Don't attempt it client-side.
-- Mermaid v11 rejects `/` in branch names. Use `-` instead (`claude-feature-x`, not `claude/feature-x`).
-- Commit id strings: alphanumeric, spaces, hyphens only. No `:` `/` `.` `()` and do not use reserved words (`merge`, `commit`, `branch`, `checkout`) as id values.
-- Merge commit ids: use `"3way"` / `"3way-2"` etc. for three-way merges, `"ff"` for fast-forward.
-
-**To update the graph:** pull the commit log from the origin repo (via `mcp__github__list_commits`), reconstruct the branch topology from merge commit messages, rewrite the Mermaid block, update the date.
+## Task Tracking
+Repo-local TODO files are deprecated. Track follow-up work in the canonical second-brain/wiki system, not in this deployment repo.
