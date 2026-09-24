@@ -3,432 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A visual gallery of real 3-D models and public-domain images suitable for conversion into printable bas-reliefs.">
+  <meta name="description" content="A visual gallery of real 3-D models, public-domain images, and live map-relief previews suitable for printable bas-reliefs.">
   <meta name="color-scheme" content="light dark">
   <title>Office Relief Source Gallery</title>
-  <style>
-    :root {
-      --bg: #f4f1ea;
-      --surface: rgba(255, 255, 255, 0.84);
-      --surface-strong: #fff;
-      --ink: #171717;
-      --muted: #66645f;
-      --line: rgba(23, 23, 23, 0.14);
-      --accent: #254e70;
-      --accent-soft: #dbe8f2;
-      --high: #23633d;
-      --medium: #8a5a12;
-      --experimental: #7a334b;
-      --shadow: 0 18px 48px rgba(34, 30, 22, 0.09);
-      --radius: 20px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #171817;
-        --surface: rgba(35, 37, 35, 0.9);
-        --surface-strong: #252725;
-        --ink: #f3f1eb;
-        --muted: #b7b5ae;
-        --line: rgba(255, 255, 255, 0.14);
-        --accent: #9cc8e8;
-        --accent-soft: #20384a;
-        --high: #8ed3a8;
-        --medium: #e2b66e;
-        --experimental: #e5a0b6;
-        --shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
-      }
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at 18% -8%, rgba(90, 125, 155, 0.17), transparent 34rem),
-        radial-gradient(circle at 92% 12%, rgba(161, 117, 72, 0.12), transparent 30rem),
-        var(--bg);
-      color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.5;
-    }
-
-    a { color: inherit; }
-
-    .shell {
-      width: min(1480px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 34px 0 70px;
-    }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: clamp(28px, 5vw, 64px);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      background: var(--surface);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-    }
-
-    .eyebrow {
-      margin: 0 0 12px;
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 760;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      max-width: 920px;
-      margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(2.5rem, 7vw, 6.6rem);
-      font-weight: 500;
-      letter-spacing: -0.055em;
-      line-height: 0.94;
-    }
-
-    .lede {
-      max-width: 810px;
-      margin: 24px 0 0;
-      color: var(--muted);
-      font-size: clamp(1.02rem, 1.8vw, 1.28rem);
-    }
-
-    .truth {
-      display: inline-flex;
-      gap: 9px;
-      align-items: center;
-      margin-top: 24px;
-      padding: 9px 13px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--surface-strong);
-      color: var(--muted);
-      font-size: 0.88rem;
-      font-weight: 650;
-    }
-
-    .truth::before {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--high);
-      content: "";
-    }
-
-    .controls {
-      position: sticky;
-      z-index: 10;
-      top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin: 24px 0;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: color-mix(in srgb, var(--surface-strong) 88%, transparent);
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
-      backdrop-filter: blur(16px);
-    }
-
-    .filter {
-      appearance: none;
-      padding: 9px 13px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--ink);
-      cursor: pointer;
-      font: inherit;
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
-
-    .filter:hover,
-    .filter:focus-visible {
-      border-color: var(--accent);
-      outline: none;
-    }
-
-    .filter[aria-pressed="true"] {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-      color: var(--accent);
-    }
-
-    .search {
-      min-width: min(100%, 250px);
-      flex: 1 1 250px;
-      padding: 10px 14px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--ink);
-      font: inherit;
-    }
-
-    .search:focus {
-      border-color: var(--accent);
-      outline: 2px solid color-mix(in srgb, var(--accent) 25%, transparent);
-    }
-
-    .count {
-      margin-left: auto;
-      padding: 0 8px;
-      color: var(--muted);
-      font-size: 0.88rem;
-      white-space: nowrap;
-    }
-
-    .section-head {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px 24px;
-      align-items: end;
-      justify-content: space-between;
-      margin: 42px 2px 16px;
-    }
-
-    .section-head h2 {
-      margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(1.8rem, 4vw, 3.2rem);
-      font-weight: 500;
-      letter-spacing: -0.035em;
-    }
-
-    .section-head p {
-      max-width: 680px;
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-      gap: 18px;
-    }
-
-    .card {
-      display: flex;
-      min-width: 0;
-      overflow: hidden;
-      flex-direction: column;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--surface);
-      box-shadow: 0 12px 30px rgba(25, 21, 15, 0.07);
-      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
-      box-shadow: var(--shadow);
-    }
-
-    .card[hidden] { display: none; }
-
-    .image-link {
-      position: relative;
-      display: block;
-      overflow: hidden;
-      aspect-ratio: 4 / 3;
-      background: #d9d7d0;
-    }
-
-    .image-link img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-      transition: transform 300ms ease;
-    }
-
-    .card:hover .image-link img { transform: scale(1.025); }
-
-    .image-link::after {
-      position: absolute;
-      right: 12px;
-      bottom: 12px;
-      padding: 6px 9px;
-      border-radius: 999px;
-      background: rgba(20, 20, 20, 0.74);
-      color: #fff;
-      content: "View source ↗";
-      font-size: 0.72rem;
-      font-weight: 760;
-      letter-spacing: 0.02em;
-      opacity: 0;
-      transform: translateY(3px);
-      transition: opacity 160ms ease, transform 160ms ease;
-    }
-
-    .card:hover .image-link::after,
-    .image-link:focus-visible::after {
-      opacity: 1;
-      transform: none;
-    }
-
-    .card-body {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      gap: 12px;
-      padding: 17px;
-    }
-
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      align-items: center;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 5px 8px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--muted);
-      font-size: 0.7rem;
-      font-weight: 780;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-    }
-
-    .badge.high { color: var(--high); }
-    .badge.medium { color: var(--medium); }
-    .badge.experimental { color: var(--experimental); }
-
-    .card h3 {
-      margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 1.42rem;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-    }
-
-    .note {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.94rem;
-    }
-
-    .candidate-id {
-      overflow-wrap: anywhere;
-      color: var(--muted);
-      font: 0.72rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: auto;
-      padding-top: 4px;
-    }
-
-    .action {
-      padding: 8px 10px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      text-decoration: none;
-      font-size: 0.82rem;
-      font-weight: 720;
-    }
-
-    .action.primary {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-      color: var(--accent);
-    }
-
-    .action:hover,
-    .action:focus-visible {
-      border-color: var(--accent);
-      outline: none;
-    }
-
-    .maps {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
-      gap: 18px;
-      margin-top: 46px;
-      padding: clamp(22px, 4vw, 40px);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: var(--surface);
-      box-shadow: var(--shadow);
-    }
-
-    .maps h2 {
-      margin: 0 0 8px;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 500;
-      letter-spacing: -0.035em;
-    }
-
-    .maps p { margin: 0; color: var(--muted); }
-
-    .map-facts {
-      display: grid;
-      gap: 10px;
-      align-content: start;
-    }
-
-    .map-fact {
-      padding: 12px 14px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--surface-strong);
-    }
-
-    .map-fact strong { display: block; margin-bottom: 3px; }
-    .map-fact span { color: var(--muted); font-size: 0.88rem; }
-
-    .empty {
-      padding: 40px;
-      border: 1px dashed var(--line);
-      border-radius: 18px;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    footer {
-      max-width: 850px;
-      margin: 42px auto 0;
-      color: var(--muted);
-      font-size: 0.84rem;
-      text-align: center;
-    }
-
-    footer a { color: var(--accent); }
-
-    @media (max-width: 760px) {
-      .shell { width: min(100% - 20px, 1480px); padding-top: 10px; }
-      .hero { border-radius: 20px; }
-      .controls { position: static; }
-      .count { width: 100%; margin-left: 0; }
-      .maps { grid-template-columns: 1fr; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
   <main class="shell">
@@ -436,169 +15,60 @@
       <p class="eyebrow">Printable reflected-light reliefs</p>
       <h1>Real source material, ready to become depth.</h1>
       <p class="lede">
-        Existing 3-D models and public-domain scientific illustrations selected for bas-relief conversion.
-        Each card points to the upstream source and the original downloadable asset.
+        Live terrain-and-building views, existing 3-D models, and public-domain scientific illustrations selected for bas-relief conversion. Each source card points to the upstream asset; each map card points to the reproducible local-data pipeline.
       </p>
-      <div class="truth">Actual source files — no generated concept art</div>
+      <div class="truth">Actual sources and live geospatial previews — no generated concept poster</div>
     </header>
 
-    <nav class="controls" aria-label="Gallery filters">
-      <button class="filter" type="button" data-filter="all" aria-pressed="true">All</button>
+    <nav class="controls" aria-label="Gallery navigation and filters">
+      <a class="filter jump" href="#maps">Map reliefs ↓</a>
+      <button class="filter" type="button" data-filter="all" aria-pressed="true">All sources</button>
       <button class="filter" type="button" data-filter="mesh" aria-pressed="false">3-D models</button>
       <button class="filter" type="button" data-filter="image" aria-pressed="false">Images</button>
       <button class="filter" type="button" data-filter="high" aria-pressed="false">Best first trials</button>
-      <input class="search" id="search" type="search" placeholder="Search shells, terrain, corals…" aria-label="Search candidates">
+      <input class="search" id="search" type="search" placeholder="Search shells, terrain, corals…" aria-label="Search source candidates">
       <span class="count" id="count" aria-live="polite"></span>
     </nav>
 
-    <div class="section-head">
-      <div>
-        <p class="eyebrow">Candidate library</p>
-        <h2>Twenty starting points</h2>
+    <section id="maps" aria-labelledby="maps-heading">
+      <div class="map-intro">
+        <div>
+          <p class="eyebrow">Local geography as physical surface</p>
+          <h2 id="maps-heading">Map relief candidates</h2>
+          <p>
+            These are live, oblique source previews—not screenshots pretending to be finished prints. Drag them to inspect the landform and building massing. The actual STL route uses official bounded elevation and building data, records provenance and transformations, then collapses the result into one support-free height field.
+          </p>
+        </div>
+        <div class="map-principles" aria-label="Map-relief design rules">
+          <div class="map-principle"><strong>Terrain and buildings scale separately</strong><span>Neighborhood terrain needs more exaggeration than its buildings.</span></div>
+          <div class="map-principle"><strong>Large forms win</strong><span>Ridges, river edges, blocks, and towers survive FDM; tiny facade detail does not.</span></div>
+          <div class="map-principle"><strong>First print stays small</strong><span>Validate one 100–160 mm reflected-light coupon before a wall panel.</span></div>
+        </div>
       </div>
-      <p>
-        “High” means likely to survive a 100–160 mm FDM coupon with modest cleanup. “Medium” needs more view selection,
-        cropping, smoothing, or decimation. “Experimental” contains thin or disconnected detail.
-      </p>
-    </div>
+      <div class="map-grid" id="map-grid" aria-label="Live map relief previews"></div>
+    </section>
 
-    <section class="grid" id="gallery" aria-label="Relief source candidates"></section>
-    <div class="empty" id="empty" hidden>No candidates match that filter.</div>
-
-    <section class="maps">
-      <div>
-        <p class="eyebrow">Generated rather than downloaded</p>
-        <h2>Local map reliefs</h2>
+    <section aria-labelledby="library-heading">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Downloadable source library</p>
+          <h2 id="library-heading">Twenty more starting points</h2>
+        </div>
         <p>
-          The companion pipeline can pull a bounded terrain raster, simplified building footprints, and optional roads for
-          Washington, DC, Montgomery County, or a USGS-backed extent, then combine them into one flat-backed printable relief.
-          Bethesda and AU Park can therefore be generated to the exact crop and scale rather than chosen from a stock model library.
+          “High” means likely to survive a 100–160 mm FDM coupon with modest cleanup. “Medium” needs more view selection, cropping, smoothing, or decimation. “Experimental” contains thin or disconnected detail.
         </p>
       </div>
-      <div class="map-facts" aria-label="Map pipeline features">
-        <div class="map-fact"><strong>Terrain</strong><span>Official elevation services with source and transformation manifests.</span></div>
-        <div class="map-fact"><strong>Buildings</strong><span>Height-aware masses simplified into support-free geometry.</span></div>
-        <div class="map-fact"><strong>Roads</strong><span>Optional shallow engraving for visual orientation.</span></div>
-      </div>
+      <div class="grid" id="gallery" aria-label="Relief source candidates"></div>
+      <div class="empty" id="empty" hidden>No source candidates match that filter.</div>
     </section>
 
     <footer>
-      NASA previews and model files remain hosted by NASA. Haeckel plates remain hosted by Wikimedia Commons and are linked to their
-      public-domain source pages. This page is a curated index, not a mirror of the upstream assets.
+      Map previews are interactive source inspection, not final mesh renders. Map data and elevation attribution remain visible inside each map. NASA previews and model files remain hosted by NASA; Haeckel plates remain hosted by Wikimedia Commons. This page indexes upstream assets rather than mirroring them.
     </footer>
   </main>
 
-  <script>
-    const groups = [
-      {
-        kind: "mesh",
-        collection: "NASA 3D Resources",
-        sourceTemplate: "https://github.com/nasa/NASA-3D-Resources/tree/master/{path}",
-        previewTemplate: "https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/{path}/{base}.png",
-        downloadTemplate: "https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/{path}/{base}.stl",
-        items: [
-          { id: "nasa-apollo-11-landing-site", title: "Apollo 11 landing site", path: "3D%20Printing/Apollo%2011%20-%20Landing%20Site", base: "Apollo%2011%20-%20Landing%20Site", tier: "high", note: "Already a terrain slab. Use directly or crop lightly; nearly ideal support-free relief geometry." },
-          { id: "nasa-apollo-15-landing-site", title: "Apollo 15 landing site", path: "3D%20Printing/Apollo%2015%20-%20Landing%20Site", base: "Apollo%2015%20-%20Landing%20Site", tier: "high", note: "Hadley–Apennine ridges and valleys should read strongly under ordinary side light." },
-          { id: "nasa-apollo-17-landing-site", title: "Apollo 17 landing site", path: "3D%20Printing/Apollo%2017%20-%20Landing%20Site", base: "Apollo%2017%20-%20Landing%20Site", tier: "high", note: "Taurus–Littrow valley has a natural framed-landscape composition." },
-          { id: "nasa-bennu", title: "Asteroid Bennu", path: "3D%20Printing/Asteroid%20101955%20Bennu", base: "Asteroid%20101955%20Bennu", tier: "medium", note: "Project one hemisphere of the diamond-like body into a centered medallion." },
-          { id: "nasa-geographos", title: "Asteroid Geographos", path: "3D%20Printing/Asteroid%201620%20Geographos", base: "Asteroid%201620%20Geographos", tier: "medium", note: "Elongated asymmetric silhouette with broad, uncomplicated depth." },
-          { id: "nasa-kleopatra", title: "Asteroid Kleopatra", path: "3D%20Printing/Asteroid%20216%20Kleopatra", base: "Asteroid%20216%20Kleopatra", tier: "medium", note: "Dog-bone form becomes an unusual abstract relief; keep the narrow waist shallow." },
-          { id: "nasa-itokawa", title: "Asteroid Itokawa", path: "3D%20Printing/Asteroid%2025143%20Itokawa", base: "Asteroid%2025143%20Itokawa", tier: "medium", note: "Lumpy contact-binary form suited to a medallion with a generous blank border." },
-          { id: "nasa-vesta-a", title: "Asteroid Vesta", path: "3D%20Printing/Asteroid%204%20Vesta%20%28A%29", base: "Asteroid%204%20Vesta%20%28A%29", tier: "medium", note: "Strong crater structure. Decimate first and suppress microtexture before projection." },
-          { id: "nasa-toutatis", title: "Asteroid Toutatis", path: "3D%20Printing/Asteroid%204179%20Toutatis", base: "Asteroid%204179%20Toutatis", tier: "medium", note: "Irregular two-lobed profile with clean large-scale depth cues." },
-          { id: "nasa-block-island", title: "Block Island meteorite", path: "3D%20Printing/Block%20Island", base: "Block%20Island", tier: "medium", note: "Natural rock scan useful for testing how aggressively scan texture must be smoothed." }
-        ]
-      },
-      {
-        kind: "image",
-        collection: "Ernst Haeckel — Kunstformen der Natur",
-        sourceTemplate: "https://commons.wikimedia.org/wiki/File:{wiki}",
-        previewTemplate: "https://commons.wikimedia.org/wiki/Special:Redirect/file/{file}?width=900",
-        downloadTemplate: "https://commons.wikimedia.org/wiki/Special:Redirect/file/{file}",
-        items: [
-          { id: "haeckel-ammonitida", title: "Ammonites", file: "Haeckel%20Ammonitida.jpg", wiki: "Haeckel_Ammonitida.jpg", tier: "high", note: "Crop one to three shells. Broad ribs should survive coarse FDM better than fine engraving." },
-          { id: "haeckel-arachnida", title: "Arachnids", file: "Haeckel%20Arachnida.jpg", wiki: "Haeckel_Arachnida.jpg", tier: "experimental", note: "Strong silhouettes but many thin legs. Crop one spider and print it larger." },
-          { id: "haeckel-orchidae", title: "Orchids", file: "Haeckel%20Orchidae.jpg", wiki: "Haeckel_Orchidae.jpg", tier: "medium", note: "Layered petals can work after background flattening; crop one flower." },
-          { id: "haeckel-discomedusae-8", title: "Jellyfish", file: "Haeckel%20Discomedusae%208.jpg", wiki: "Haeckel_Discomedusae_8.jpg", tier: "medium", note: "Use one or two radial bells; the long fine tentacles otherwise disappear." },
-          { id: "haeckel-anthomedusae", title: "Hydromedusae", file: "Haeckel%20Anthomedusae.jpg", wiki: "Haeckel_Anthomedusae.jpg", tier: "high", note: "Strong radial anatomy with a clean scientific-diagram character." },
-          { id: "haeckel-spumellaria", title: "Radiolarians", file: "Haeckel%20Spumellaria.jpg", wiki: "Haeckel_Spumellaria.jpg", tier: "medium", note: "Crop one geometric organism and enforce a nozzle-aware minimum feature size." },
-          { id: "haeckel-actiniae", title: "Sea anemones", file: "Haeckel%20Actiniae.jpg", wiki: "Haeckel_Actiniae.jpg", tier: "high", note: "Broad organic masses and folded radial texture; a strong whole-plate candidate after blur." },
-          { id: "haeckel-hexacoralla", title: "Corals", file: "Haeckel%20Hexacoralla.jpg", wiki: "Haeckel_Hexacoralla.jpg", tier: "high", note: "Crop one coral skeleton and remove labels and background tone." },
-          { id: "haeckel-tetracoralla", title: "Rugose corals", file: "Haeckel%20Tetracoralla.jpg", wiki: "Haeckel_Tetracoralla.jpg", tier: "high", note: "Fossil-like sections with strong, restrained geometry." },
-          { id: "haeckel-trochilidae", title: "Hummingbirds", file: "Haeckel%20Trochilidae.jpg", wiki: "Haeckel_Trochilidae.jpg", tier: "experimental", note: "Disconnected birds, feathers, and negative space make this a selective-crop experiment." }
-        ]
-      }
-    ];
-
-    const expand = (template, item) => template.replace(/\{(\w+)\}/g, (_, key) => item[key] ?? "");
-    const gallery = document.querySelector("#gallery");
-    const empty = document.querySelector("#empty");
-    const count = document.querySelector("#count");
-    const search = document.querySelector("#search");
-    const filters = [...document.querySelectorAll(".filter")];
-    let activeFilter = "all";
-
-    const candidates = groups.flatMap(group => group.items.map(item => ({
-      ...item,
-      kind: group.kind,
-      collection: group.collection,
-      source: expand(group.sourceTemplate, item),
-      preview: expand(group.previewTemplate, item),
-      download: expand(group.downloadTemplate, item)
-    })));
-
-    const kindLabel = kind => kind === "mesh" ? "3-D model" : "Image";
-    const tierLabel = tier => ({ high: "Best first trial", medium: "Needs preparation", experimental: "Experimental" }[tier]);
-
-    function makeCard(item) {
-      const article = document.createElement("article");
-      article.className = "card";
-      article.dataset.kind = item.kind;
-      article.dataset.tier = item.tier;
-      article.dataset.search = `${item.title} ${item.note} ${item.collection} ${item.id}`.toLowerCase();
-      article.innerHTML = `
-        <a class="image-link" href="${item.source}" target="_blank" rel="noopener noreferrer" aria-label="View source page for ${item.title}">
-          <img src="${item.preview}" alt="${item.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer">
-        </a>
-        <div class="card-body">
-          <div class="meta">
-            <span class="badge">${kindLabel(item.kind)}</span>
-            <span class="badge ${item.tier}">${tierLabel(item.tier)}</span>
-          </div>
-          <h3>${item.title}</h3>
-          <p class="note">${item.note}</p>
-          <span class="candidate-id">${item.id}</span>
-          <div class="actions">
-            <a class="action primary" href="${item.download}" target="_blank" rel="noopener noreferrer">Original asset ↗</a>
-            <a class="action" href="${item.source}" target="_blank" rel="noopener noreferrer">Source &amp; rights ↗</a>
-          </div>
-        </div>`;
-      return article;
-    }
-
-    candidates.forEach(item => gallery.append(makeCard(item)));
-
-    function applyFilters() {
-      const term = search.value.trim().toLowerCase();
-      let visible = 0;
-      document.querySelectorAll(".card").forEach(card => {
-        const categoryMatch = activeFilter === "all" || card.dataset.kind === activeFilter || card.dataset.tier === activeFilter;
-        const textMatch = !term || card.dataset.search.includes(term);
-        card.hidden = !(categoryMatch && textMatch);
-        if (!card.hidden) visible += 1;
-      });
-      count.textContent = `${visible} of ${candidates.length} shown`;
-      empty.hidden = visible !== 0;
-    }
-
-    filters.forEach(button => button.addEventListener("click", () => {
-      activeFilter = button.dataset.filter;
-      filters.forEach(other => other.setAttribute("aria-pressed", String(other === button)));
-      applyFilters();
-    }));
-
-    search.addEventListener("input", applyFilters);
-    applyFilters();
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
+  <script src="./catalog.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
